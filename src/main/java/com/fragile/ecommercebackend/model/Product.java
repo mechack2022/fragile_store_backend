@@ -1,6 +1,7 @@
 package com.fragile.ecommercebackend.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
+@Builder
 public class Product {
 
     @Id
