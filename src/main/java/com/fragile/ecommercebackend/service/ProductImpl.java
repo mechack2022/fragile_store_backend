@@ -108,7 +108,7 @@ public class ProductImpl implements ProductService {
     @Override
     public Page<Product> getAllProduct(String category, List<String> colors, List<String> sizes, Integer miniPrice, Integer maxPrice, Integer minDiscount, String sort, String stock, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        List<Product> productList = productRepository.filterProduct(category, maxPrice, miniPrice, minDiscount, sort);
+        List<Product> productList = productRepository.findProductsByCategoryAndPriceRangeAndDiscount(category, maxPrice, miniPrice, minDiscount, sort);
 
         if (!colors.isEmpty()) {
             productList = productList.stream().filter(p -> colors.stream().anyMatch(c -> c.equalsIgnoreCase(p.getColor()))).collect(Collectors.toList());
