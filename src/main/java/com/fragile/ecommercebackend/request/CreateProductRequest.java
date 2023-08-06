@@ -23,7 +23,6 @@ public class CreateProductRequest {
     private int quantity;
     private Set<Size>  sizes= new HashSet<>();
     private  String imageUrl;
-
     private String topLevelCategory;
     private String secondLevelCategory;
     private String thirdLevelCategory;
