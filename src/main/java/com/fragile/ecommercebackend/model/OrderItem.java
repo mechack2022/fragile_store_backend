@@ -2,34 +2,31 @@ package com.fragile.ecommercebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class Review {
+@AllArgsConstructor
+@Builder
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @ManyToOne
-    @JoinColumn(name = "product_id")
     @JsonIgnore
-    private Product product;
-
-    @JoinColumn(name="user_id")
+    private OrderEntity order;
     @ManyToOne
-    private User user;
-
-    private String review;
-
+    private Product product;
+    private Integer price;
+    private Integer discountedPrice;
+    private String size;
+    private int quantity;
+    private Long userId;
     private LocalDateTime createdAt;
+
 }
