@@ -76,11 +76,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderEntity findOrderById(Long orderId) throws OrderException {
-       Optional<OrderEntity> order = orderRepository.findById(orderId);
-       if(order.isPresent()){
-           return order.get();
-       }
-       throw new OrderException("order not found with id: "+ orderId);
+        Optional<OrderEntity> order = orderRepository.findById(orderId);
+        if (order.isPresent()) {
+            return order.get();
+        }
+        throw new OrderException("order not found with id: " + orderId);
     }
 
     @Override
@@ -90,9 +90,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderEntity placeOrder(Long orderId) throws OrderException {
-       OrderEntity order = findOrderById(orderId);
-         order.setOrderStatus("PLACED");
-         order.getPaymentDetails().setPaymentStatus("COMPLETED");
+        OrderEntity order = findOrderById(orderId);
+        order.setOrderStatus("PLACED");
+        order.getPaymentDetails().setPaymentStatus("COMPLETED");
         return order;
     }
 
@@ -103,12 +103,13 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-     @Override
-     public OrderEntity confirmedOrder(Long orderId){
-         OrderEntity order = findOrderById(orderId);
-         order.setOrderStatus("CONFIRMED");
-         return orderRepository.save(order);
-     }
+    @Override
+    public OrderEntity confirmedOrder(Long orderId) {
+        OrderEntity order = findOrderById(orderId);
+        order.setOrderStatus("CONFIRMED");
+        return orderRepository.save(order);
+    }
+
     @Override
     public OrderEntity deliveredOrder(Long orderId) throws OrderException {
         OrderEntity order = findOrderById(orderId);
