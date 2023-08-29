@@ -16,6 +16,7 @@ public interface OrderService {
     List<OrderEntity> userOderHistory(Long userId);
 
     OrderEntity placeOrder(Long orderId) throws OrderException;
+    public OrderEntity confirmedOrder(Long orderId);
 
     OrderEntity shippedOrder(Long orderId) throws OrderException;
 
