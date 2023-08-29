@@ -24,7 +24,7 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cart_items")
+//    @JoinColumn(name = "cart_items")
     private Set<CartItem> cartItems = new HashSet<>();
     private Double totalPrice;
     private Integer totalItem;

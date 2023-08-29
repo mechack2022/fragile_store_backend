@@ -75,6 +75,11 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findAllProduct() {
+        return productRepository.findAll();
+    }
+
+    @Override
     public String deleteProduct(Long productId) throws ProductException {
         Product product = productRepository.findById(productId).get();
         product.getSizes().clear();
