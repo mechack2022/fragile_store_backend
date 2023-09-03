@@ -19,9 +19,9 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
 
     private final OrderRepository orderRepository;
-    private final CartRepository cartRepository;
+//    private final CartRepository cartRepository;
     private final OrderItemRepository orderItemRepository;
-    private final OrderItemService orderItemService;
+//    private final OrderItemService orderItemService;
     private final CartService cartService;
 
     @Override
