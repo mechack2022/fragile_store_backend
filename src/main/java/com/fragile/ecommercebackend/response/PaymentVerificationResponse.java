@@ -58,12 +58,6 @@ public class PaymentVerificationResponse {
         @JsonProperty("currency")
         private String currency;
 
-        @JsonProperty("ip_address")
-        private String ipAddress;
-
-        @JsonProperty("pricing_plan_type")
-        private String pricingPlanType;
-
         @JsonProperty("created_on")
         private Date createdOn = new Date();
 
