@@ -33,13 +33,12 @@ public class PaystackController {
         return paystackService.initializePayment(initializePaymentDto);
     }
 
-    @GetMapping("/verifypayment/{reference}/{plan}/{id}")
+    @GetMapping("/verifypayment/{reference}/{id}")
     public PaymentVerificationResponse paymentVerification(@PathVariable(value = "reference") String reference,
-                                                           @PathVariable(value = "plan") String plan,
                                                            @PathVariable(value = "id") Long id) throws Exception {
-        if (reference.isEmpty() || plan.isEmpty()) {
-            throw new Exception("reference, plan and id must be provided in path");
+        if (reference.isEmpty()) {
+            throw new Exception("reference id must be provided in path");
         }
-        return paystackService.paymentVerification(reference, plan, id);
+        return paystackService.paymentVerification(reference, id);
     }
 }
