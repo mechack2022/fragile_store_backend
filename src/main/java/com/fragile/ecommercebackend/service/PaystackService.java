@@ -9,6 +9,6 @@ import com.fragile.ecommercebackend.response.PaymentVerificationResponse;
 public interface PaystackService {
     CreatePlanResponse createPlan(CreatePlanDto createPlanDto) throws Exception;
     InitializePaymentResponse initializePayment(InitializePaymentDto initializePaymentDto);
-    PaymentVerificationResponse paymentVerification(String reference, String plan, Long id) throws Exception;
+    PaymentVerificationResponse paymentVerification(String reference,  Long id) throws Exception;
 
 }

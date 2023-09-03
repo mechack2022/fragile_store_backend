@@ -2,6 +2,7 @@ package com.fragile.ecommercebackend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fragile.ecommercebackend.constants.PricingPlanType;
+import com.fragile.ecommercebackend.exceptions.UserException;
 import com.fragile.ecommercebackend.model.PaymentPaystack;
 import com.fragile.ecommercebackend.model.User;
 import com.fragile.ecommercebackend.repository.PaystackPaymentRepositoryImpl;
@@ -26,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.http.HttpClient;
 import java.util.Date;
+import java.util.Optional;
 
 import static com.fragile.ecommercebackend.constants.ApiConstant.*;
 
@@ -116,7 +118,7 @@ public class PaystackServiceImpl implements PaystackService {
 
     @Override
     @Transactional
-    public PaymentVerificationResponse paymentVerification(String reference, String plan, Long id) throws Exception {
+    public PaymentVerificationResponse paymentVerification(String reference, Long userId) throws Exception {
         PaymentVerificationResponse paymentVerificationResponse = null;
         PaymentPaystack paymentPaystack = null;
 
@@ -146,8 +148,8 @@ public class PaystackServiceImpl implements PaystackService {
                 throw new Exception("An error");
             } else if (paymentVerificationResponse.getData().getStatus().equals("success")) {
 
-                User appUser = appUserRepository.getById(id);
-                PricingPlanType pricingPlanType = PricingPlanType.valueOf(plan.toUpperCase());
+                User appUser = findUserById(userId);
+//                User appUser = appUserRepository.findUserById(userId);
 
                 paymentPaystack = PaymentPaystack.builder()
                         .user(appUser)
@@ -158,8 +160,6 @@ public class PaystackServiceImpl implements PaystackService {
                         .createdAt(paymentVerificationResponse.getData().getCreatedAt())
                         .channel(paymentVerificationResponse.getData().getChannel())
                         .currency(paymentVerificationResponse.getData().getCurrency())
-                        .ipAddress(paymentVerificationResponse.getData().getIpAddress())
-                        .pricingPlanType(pricingPlanType)
                         .createdOn(new Date())
                         .build();
             }
@@ -168,6 +168,14 @@ public class PaystackServiceImpl implements PaystackService {
         }
         paystackPaymentRepository.save(paymentPaystack);
         return paymentVerificationResponse;
+    }
+
+    private User findUserById(Long userId) {
+      Optional<User>  user = appUserRepository.findById(userId);
+      if(user.isPresent()){
+          return user.get();
+      }
+      throw  new UserException("User not found with this id " + userId);
     }
 }
 
