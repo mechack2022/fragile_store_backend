@@ -23,6 +23,10 @@ public class CreateProductRequest {
     private int quantity;
     private Set<Size>  sizes= new HashSet<>();
     private  String imageUrl;
+
+//    NOTE THIS CATEGORIES LOOK SOMETHING LIKE THIS
+//            men/clothing/men_shirt
+//    so, topLevelCategory= men, secondLevelCategory = clothing, thirdLevelCategory= men_shirt
     private String topLevelCategory;
     private String secondLevelCategory;
     private String thirdLevelCategory;

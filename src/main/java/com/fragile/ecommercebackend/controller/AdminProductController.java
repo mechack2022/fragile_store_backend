@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("api/admin/controller")
+@RequestMapping("/api/admin/controller")
 @RequiredArgsConstructor
 public class AdminProductController {
 
@@ -49,7 +49,7 @@ public class AdminProductController {
             productService.createProduct(product);
         }
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setMessage("Product created Successfull");
+        apiResponse.setMessage("Product created Successful");
         apiResponse.setStatus(true);
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
