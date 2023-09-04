@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/products")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping
+    @GetMapping("/products")
     public ResponseEntity<Page<Product>> findProductByCategoryHandler(
             @RequestParam String category, @RequestParam List<String> colors, @RequestParam List<String> sizes,
             @RequestParam Integer miniPrice, @RequestParam Integer maxPrice, @RequestParam Integer minDiscount,
@@ -27,16 +27,10 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/product/id/{productId}")
     public ResponseEntity<Product> findProductByIdHandler(@PathVariable("productId") Long productId) throws ProductException {
         return new ResponseEntity<>(productService.findProductById(productId), HttpStatus.OK);
     }
 
 
-//    @GetMapping("/search/product")
-//    public ResponseEntity<List<Product>> searchProductHandler(@RequestBody String productName) {
-//
-//        List<Product> foundProduct = productService.searchProduct(productName);
-//        return new ResponseEntity<>(foundProduct, HttpStatus.OK);
-//    }
 }

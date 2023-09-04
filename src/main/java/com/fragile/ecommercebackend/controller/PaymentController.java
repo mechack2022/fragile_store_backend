@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/payment")
+@RequestMapping("/api/payment")
 public class PaymentController {
 
     @Value("razorpay.api.secret")
