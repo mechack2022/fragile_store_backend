@@ -1,6 +1,5 @@
 package com.fragile.ecommercebackend.model;
 
-import com.fragile.ecommercebackend.constants.PricingPlanType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

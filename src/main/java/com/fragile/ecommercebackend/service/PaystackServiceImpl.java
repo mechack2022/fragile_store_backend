@@ -1,7 +1,6 @@
 package com.fragile.ecommercebackend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fragile.ecommercebackend.constants.PricingPlanType;
 import com.fragile.ecommercebackend.exceptions.UserException;
 import com.fragile.ecommercebackend.model.PaymentPaystack;
 import com.fragile.ecommercebackend.model.User;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.http.HttpClient;
 import java.util.Date;
 import java.util.Optional;
 
