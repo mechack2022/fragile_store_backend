@@ -19,9 +19,9 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
 
     private final OrderRepository orderRepository;
-//    private final CartRepository cartRepository;
+
     private final OrderItemRepository orderItemRepository;
-//    private final OrderItemService orderItemService;
+
     private final CartService cartService;
 
     @Override
@@ -65,7 +65,9 @@ public class OrderServiceImpl implements OrderService {
         createdOrder.setOrderDate(LocalDateTime.now());
 
         OrderEntity savedOrder = orderRepository.save(createdOrder);
-        //save orderItem
+
+//        Linking OrderItems to OrderEntity
+//        This linkage indicates that these OrderItem objects are associated with this specific order.
         for (OrderItem item : orderItems) {
             item.setOrder(savedOrder);
             orderItemRepository.save(item);

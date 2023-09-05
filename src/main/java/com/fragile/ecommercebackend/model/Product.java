@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@ToString
 public class Product {
 
     @Id
@@ -29,7 +30,7 @@ public class Product {
 
     private int discountedPrice;
 
-    private int discountedPercent;
+    private int discountPercent;
 
     private int quantity;
     private String brand;
@@ -40,13 +41,14 @@ public class Product {
 //    @Embedded
     @ElementCollection
     @Column(name = "sizes")
-    private Set<Size> sizes = new HashSet<>();
+    private Set<Size> size = new HashSet<>();
 
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
-
+    @ToString.Exclude
     private List<Rating> ratings = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Review> reviews= new ArrayList<>();
 
     private int numRatings;

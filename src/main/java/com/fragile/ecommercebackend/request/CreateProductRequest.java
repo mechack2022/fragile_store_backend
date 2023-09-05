@@ -18,13 +18,13 @@ public class CreateProductRequest {
     private String brand;
     private int price;
     private int discountedPrice;
-    private int discountedPercent;
+    private int discountPercent;
     private String color;
     private int quantity;
-    private Set<Size>  sizes= new HashSet<>();
+    private Set<Size> size = new HashSet<>();
     private  String imageUrl;
 
-//    NOTE THIS CATEGORIES LOOK SOMETHING LIKE THIS
+//    NOTE THIS CATEGORIES LOOK SOMETHING LIKE
 //            men/clothing/men_shirt
 //    so, topLevelCategory= men, secondLevelCategory = clothing, thirdLevelCategory= men_shirt
     private String topLevelCategory;

@@ -21,12 +21,16 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem createCartItem(CartItem cartItem) {
-        CartItem newCartItem = CartItem.
-                builder()
-                .quantity(1)
-                .Price(cartItem.getProduct().getPrice() * cartItem.getQuantity())
-                .discountedPrice(cartItem.getProduct().getDiscountedPrice() * cartItem.getQuantity())
+        CartItem newCartItem = CartItem.builder()
+                .quantity(cartItem.getQuantity())
+                .Price(cartItem.getPrice())
+                .discountedPrice(cartItem.getDiscountedPrice())
+                .size(cartItem.getSize())
+                .userId(cartItem.getUserId())
+                .product(cartItem.getProduct())
+                .cart(cartItem.getCart())
                 .build();
+
         return cartItemRepository.save(newCartItem);
     }
 
@@ -43,7 +47,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem isCartItemExist(Cart cart, Product product, String size, Long userId) {
+    public CartItem findByCartAndProductAndSizeAndUser(Cart cart, Product product, String size, Long userId) {
         return cartItemRepository.findByCartAndProductAndSizeAndUser(cart, product, size, userId);
     }
 

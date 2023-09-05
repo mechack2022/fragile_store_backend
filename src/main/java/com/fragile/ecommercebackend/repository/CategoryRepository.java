@@ -9,8 +9,10 @@ import org.springframework.data.repository.query.Param;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 
-    Category findByName(String topLevelCategory);
+//    Category findByName(String topLevelCategory);
 
-    @Query("select c from Category c where c.name=:name and c.parentCategory=:parentCategoryName")
-    Category findByNameAndParent(@Param("name") String nmme, @Param("parentCategoryName") String parentCategoryName);
+    Category findByNameIgnoreCase(String name);
+
+    @Query("select c from Category c where c.name=:name and c.parentCategory.name=:parentCategoryName")
+    Category findByNameAndParent(@Param("name") String name, @Param("parentCategoryName") String parentCategoryName);
 }

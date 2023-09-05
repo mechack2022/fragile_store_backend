@@ -10,15 +10,16 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String size;
-    private Integer Price;
+    private Integer Price = 0;
     private int quantity;
-    private Integer discountedPrice;
+    private int discountedPrice = 0;
     private Long userId;
     @ManyToOne
     private Product product;

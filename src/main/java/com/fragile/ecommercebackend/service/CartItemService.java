@@ -11,7 +11,7 @@ public interface CartItemService {
 
     CartItem updateCartItem(Long userId, Long cartItemId, CartItem cartItem) throws CartItemExeption, UserException;
 
-    CartItem isCartItemExist(Cart cart, Product product, String size, Long userId);
+    CartItem findByCartAndProductAndSizeAndUser(Cart cart, Product product, String size, Long userId);
 
     String removeCartItem(Long userId, Long cartItemId) throws CartItemExeption, UserException;
 

@@ -3,12 +3,15 @@ package com.fragile.ecommercebackend.controller;
 
 import com.fragile.ecommercebackend.config.JwtProvider;
 import com.fragile.ecommercebackend.exceptions.UserException;
+import com.fragile.ecommercebackend.model.Cart;
 import com.fragile.ecommercebackend.model.User;
 import com.fragile.ecommercebackend.repository.UserRepository;
 import com.fragile.ecommercebackend.request.LoginRequest;
 import com.fragile.ecommercebackend.response.AuthResponse;
+import com.fragile.ecommercebackend.service.CartService;
 import com.fragile.ecommercebackend.service.CustomUserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,13 +28,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
-//    private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final CustomUserServiceImpl customUserServiceImpl;
+
+    private final CartService cartService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException {
@@ -54,6 +59,9 @@ public class AuthController {
                 .build();
 
         userRepository.save(newUser);
+//        create user cart
+        Cart createdCart = cartService.createCart(newUser);
+        log.info("user cart : {}", createdCart);
         Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);

@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Setter
 @Getter
 @RequiredArgsConstructor
+@ToString
 public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
