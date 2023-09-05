@@ -8,6 +8,7 @@ import com.fragile.ecommercebackend.response.ApiResponse;
 import com.fragile.ecommercebackend.service.CartService;
 import com.fragile.ecommercebackend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
+@Slf4j
 public class CartController {
     private final UserService userService;
 
@@ -25,6 +27,7 @@ public class CartController {
     public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt) throws UserException {
         User user = userService.findUserProfileByJwt(jwt);
        Cart cart = cartService.findUserCart(user.getId());
+        log.info("user Id :{}", user.getId());
     return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 

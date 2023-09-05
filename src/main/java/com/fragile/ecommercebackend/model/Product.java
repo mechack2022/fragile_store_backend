@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@ToString
 public class Product {
 
     @Id
@@ -43,9 +44,11 @@ public class Product {
     private Set<Size> size = new HashSet<>();
 
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Rating> ratings = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Review> reviews= new ArrayList<>();
 
     private int numRatings;

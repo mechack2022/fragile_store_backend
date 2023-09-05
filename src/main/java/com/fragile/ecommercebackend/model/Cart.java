@@ -1,10 +1,7 @@
 package com.fragile.ecommercebackend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 import java.util.HashSet;
@@ -15,6 +12,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Cart {
 
     @Id
@@ -22,9 +20,10 @@ public class Cart {
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
     private User user;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "cart_items")
+    @ToString.Exclude
     private Set<CartItem> cartItems = new HashSet<>();
     private Double totalPrice;
     private Integer totalItem;
