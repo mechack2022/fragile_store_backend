@@ -26,7 +26,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    private CartItemService cartItemService;
+    private final CartItemService cartItemService;
 
     @GetMapping("/")
 //    @Operation(description="find cart by userId")
@@ -48,16 +48,7 @@ public class CartController {
 
     }
 
-    @DeleteMapping("/{cartItemId}")
-    public ResponseEntity<ApiResponse> deletedCartItemHandler(@RequestHeader("Authorization") String jwt, @PathVariable("cartItemId") Long cartItemId)
-            throws CartItemExeption, UserException {
-        User user = userService.findUserProfileByJwt(jwt);
-        String message = cartItemService.removeCartItem(user.getId(), cartItemId);
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setStatus(true);
-        apiResponse.setMessage(message);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-    }
+
 
 
 }
