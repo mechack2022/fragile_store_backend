@@ -82,12 +82,12 @@ public class PaystackController {
     }
 
 
-    @GetMapping("/verifypayment/{reference}/{id}")
-    public PaymentVerificationResponse paymentVerification(@PathVariable(value = "reference") String reference,
-                                                           @PathVariable(value = "id") Long id) throws Exception {
-        if (reference.isEmpty()) {
-            throw new Exception("reference id must be provided in path");
-        }
-        return paystackService.paymentVerification(reference, id);
-    }
+//    @GetMapping("/verifypayment/{reference}/{id}")
+//    public PaymentVerificationResponse paymentVerification(@PathVariable(value = "reference") String reference,
+//                                                           @PathVariable(value = "id") Long id) throws Exception {
+//        if (reference.isEmpty()) {
+//            throw new Exception("reference id must be provided in path");
+//        }
+//        return paystackService.paymentVerification(reference, id);
+//    }
 }
