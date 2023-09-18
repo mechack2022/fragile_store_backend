@@ -2,8 +2,10 @@ package com.fragile.ecommercebackend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fragile.ecommercebackend.exceptions.UserException;
+import com.fragile.ecommercebackend.model.OrderEntity;
 import com.fragile.ecommercebackend.model.PaymentPaystack;
 import com.fragile.ecommercebackend.model.User;
+import com.fragile.ecommercebackend.repository.OrderRepository;
 import com.fragile.ecommercebackend.repository.PaystackPaymentRepositoryImpl;
 import com.fragile.ecommercebackend.repository.UserRepository;
 import com.fragile.ecommercebackend.request.CreatePlanDto;
@@ -35,12 +37,18 @@ public class PaystackServiceImpl implements PaystackService {
     private final PaystackPaymentRepositoryImpl paystackPaymentRepository;
     private final UserRepository appUserRepository;
 
+    private final OrderService orderService;
+
     @Value("${paystack_secret_key}")
     private String paystackSecretKey;
+    private final OrderRepository orderRepository;
 
-    public PaystackServiceImpl(PaystackPaymentRepositoryImpl paystackPaymentRepository, UserRepository appUserRepository) {
+    public PaystackServiceImpl(PaystackPaymentRepositoryImpl paystackPaymentRepository, UserRepository appUserRepository, OrderService orderService,
+                               OrderRepository orderRepository) {
         this.paystackPaymentRepository = paystackPaymentRepository;
         this.appUserRepository = appUserRepository;
+        this.orderService = orderService;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -73,7 +81,7 @@ public class PaystackServiceImpl implements PaystackService {
 
             ObjectMapper mapper = new ObjectMapper();
             createPlanResponse = mapper.readValue(result.toString(), CreatePlanResponse.class);
-        } catch(Throwable ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
         }
         return createPlanResponse;
@@ -108,7 +116,7 @@ public class PaystackServiceImpl implements PaystackService {
 
             ObjectMapper mapper = new ObjectMapper();
             initializePaymentResponse = mapper.readValue(result.toString(), InitializePaymentResponse.class);
-        } catch(Throwable ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
         }
         return initializePaymentResponse;
@@ -116,11 +124,11 @@ public class PaystackServiceImpl implements PaystackService {
 
     @Override
     @Transactional
-    public PaymentVerificationResponse paymentVerification(String reference, Long userId) throws Exception {
+    public PaymentVerificationResponse paymentVerification(String reference, Long orderId) throws Exception {
         PaymentVerificationResponse paymentVerificationResponse = null;
         PaymentPaystack paymentPaystack = null;
 
-        try{
+        try {
             CloseableHttpClient client = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet(PAYSTACK_VERIFY + reference);
             request.addHeader("Content-type", "application/json");
@@ -146,11 +154,10 @@ public class PaystackServiceImpl implements PaystackService {
                 throw new Exception("An error");
             } else if (paymentVerificationResponse.getData().getStatus().equals("success")) {
 
-                User appUser = findUserById(userId);
-//                User appUser = appUserRepository.findUserById(userId);
+                OrderEntity order = orderService.findOrderById(orderId);
 
                 paymentPaystack = PaymentPaystack.builder()
-                        .user(appUser)
+                        .user(order.getUser())
                         .reference(paymentVerificationResponse.getData().getReference())
                         .amount(paymentVerificationResponse.getData().getAmount())
                         .gatewayResponse(paymentVerificationResponse.getData().getGatewayResponse())
@@ -160,20 +167,28 @@ public class PaystackServiceImpl implements PaystackService {
                         .currency(paymentVerificationResponse.getData().getCurrency())
                         .createdOn(new Date())
                         .build();
+
+                order.getPaymentDetails().setPaymentId(paymentVerificationResponse.getData().getReference());
+                order.getPaymentDetails().setPaymentStatus("COMPLETED");
+                order.setOrderStatus("PLACED");
+                orderRepository.save(order);
+
             }
+            assert paymentPaystack != null;
+            paystackPaymentRepository.save(paymentPaystack);
+            return paymentVerificationResponse;
         } catch (Exception ex) {
             throw new Exception("Paystack");
         }
-        paystackPaymentRepository.save(paymentPaystack);
-        return paymentVerificationResponse;
+
     }
 
     private User findUserById(Long userId) {
-      Optional<User>  user = appUserRepository.findById(userId);
-      if(user.isPresent()){
-          return user.get();
-      }
-      throw  new UserException("User not found with this id " + userId);
+        Optional<User> user = appUserRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        throw new UserException("User not found with this id " + userId);
     }
 }
 

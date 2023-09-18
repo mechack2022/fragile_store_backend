@@ -2,6 +2,7 @@ package com.fragile.ecommercebackend.controller;
 
 
 import com.fragile.ecommercebackend.model.OrderEntity;
+import com.fragile.ecommercebackend.repository.OrderRepository;
 import com.fragile.ecommercebackend.response.PaymentLinkResponse;
 import com.fragile.ecommercebackend.service.OrderService;
 import com.fragile.ecommercebackend.service.UserService;
@@ -27,8 +28,10 @@ public class PaymentController {
 
     private final OrderService orderService;
 
+    private final OrderRepository orderRepository;
+
 @PostMapping("/{orderId}")
-    public ResponseEntity<PaymentLinkResponse> createPayymentLink(@PathVariable("orderId") Long orderId, @RequestHeader("Authorization") String jwt){
+    public ResponseEntity<PaymentLinkResponse> createPaymentLink(@PathVariable("orderId") Long orderId, @RequestHeader("Authorization") String jwt){
 
     OrderEntity order = orderService.findOrderById(orderId);
     try{

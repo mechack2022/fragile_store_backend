@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Builder
+@ToString
 @Setter
 @Getter
 @AllArgsConstructor

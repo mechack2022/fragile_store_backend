@@ -8,12 +8,14 @@ import com.fragile.ecommercebackend.model.Product;
 import com.fragile.ecommercebackend.model.User;
 import com.fragile.ecommercebackend.repository.CartItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -34,17 +36,41 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.save(newCartItem);
     }
 
-    @Override
-    public CartItem updateCartItem(Long userId, Long cartItemId, CartItem cartItem) throws CartItemExeption, UserException {
-        CartItem item = findCartItemById(cartItemId);
-        User user = userService.findUserById(item.getUserId());
-        if (user.getId().equals(userId)) {
-            item.setQuantity(cartItem.getQuantity());
-            item.setPrice(cartItem.getProduct().getPrice() * item.getQuantity());
-            item.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice() * item.getQuantity());
+//    @Override
+//    public CartItem updateCartItem(Long userId, Long cartItemId, CartItem cartItem) throws CartItemExeption, UserException {
+//        CartItem item = findCartItemById(cartItemId);
+//        User user = userService.findUserById(item.getUserId());
+//        if (user.getId().equals(userId)) {
+//            item.setQuantity(cartItem.getQuantity());
+//            item.setPrice(cartItem.getProduct().getPrice() * item.getQuantity());
+//            item.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice() * item.getQuantity());
+//        }
+//        return cartItemRepository.save(item);
+//    }
+@Override
+public CartItem updateCartItem(Long userId, Long cartItemId, CartItem updatedCartItem) throws CartItemExeption, UserException {
+    CartItem existingCartItem = findCartItemById(cartItemId);
+    User user = userService.findUserById(existingCartItem.getUserId());
+
+    if (user.getId().equals(userId)) {
+        // Update the quantity
+        existingCartItem.setQuantity(updatedCartItem.getQuantity());
+
+        Product product = existingCartItem.getProduct();
+        if (product != null) {
+            existingCartItem.setQuantity(updatedCartItem.getQuantity());
+            existingCartItem.setPrice(product.getPrice() * existingCartItem.getQuantity());
+            existingCartItem.setDiscountedPrice(product.getDiscountedPrice() * existingCartItem.getQuantity());
+        } else {
+            throw new CartItemExeption("CartItem must have a valid Product.");
         }
-        return cartItemRepository.save(item);
+        // Save the updated cart item
+        return cartItemRepository.save(existingCartItem);
+    } else {
+        throw new CartItemExeption("User does not have permission to update this cart item.");
     }
+}
+
 
     @Override
     public CartItem findByCartAndProductAndSizeAndUser(Cart cart, Product product, String size, Long userId) {
